@@ -3,6 +3,7 @@ package com.InstaBlog.controller;
 import com.InstaBlog.entity.Post;
 import com.InstaBlog.payload.ApiResponse;
 import com.InstaBlog.payload.PostDto;
+import com.InstaBlog.payload.PostResponse;
 import com.InstaBlog.service.PostService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +39,13 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts(){
-        List<PostDto> allPosts = this.postService.getAllPosts();
-        return new ResponseEntity<>(allPosts, HttpStatus.OK);
+    public ResponseEntity<PostResponse> getAllPosts(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy
+    ){
+        PostResponse postResponse = this.postService.getAllPosts(pageNumber, pageSize, sortBy);
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
     @GetMapping("/posts/{postId}")
@@ -59,5 +64,11 @@ public class PostController {
     public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId){
         PostDto updatedPost = this.postService.updatePost(postDto, postId);
         return new ResponseEntity<>(updatedPost, HttpStatus.OK);
+    }
+
+    @GetMapping("/posts/search/{keywords}")
+    public ResponseEntity<List<PostDto>> searchPostByTitle(@PathVariable String keywords){
+        List<PostDto> result = this.postService.searchPost(keywords);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

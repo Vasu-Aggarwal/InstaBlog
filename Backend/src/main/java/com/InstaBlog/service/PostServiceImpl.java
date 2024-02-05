@@ -5,11 +5,16 @@ import com.InstaBlog.entity.Post;
 import com.InstaBlog.entity.User;
 import com.InstaBlog.exception.ResourceNotFoundException;
 import com.InstaBlog.payload.PostDto;
+import com.InstaBlog.payload.PostResponse;
 import com.InstaBlog.repository.CategoryRepo;
 import com.InstaBlog.repository.PostRepo;
 import com.InstaBlog.repository.UserRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -62,9 +67,23 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        List<Post> allPost =  this.postRepo.findAll();
-        return allPost.stream().map((post)-> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize, String sortBy) {
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+
+        Page<Post> pagePost =  this.postRepo.findAll(pageable);
+        List<Post> allPost = pagePost.getContent();
+        List<PostDto> postDtos = allPost.stream().map((post)-> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(postDtos);
+        postResponse.setPageNumber(pagePost.getNumber());
+        postResponse.setPageSize(pagePost.getSize());
+        postResponse.setTotalPages(pagePost.getTotalPages());
+        postResponse.setTotalElements(pagePost.getTotalElements());
+        postResponse.setLastPage(pagePost.isLast());
+
+        return postResponse;
     }
 
     @Override
@@ -88,7 +107,8 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<Post> searchPost(String keyword) {
-        return null;
+    public List<PostDto> searchPost(String keyword) {
+        List<Post> posts = this.postRepo.findByTitleContaining(keyword);
+        return posts.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
     }
 }
