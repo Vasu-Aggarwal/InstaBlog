@@ -1,8 +1,10 @@
 package com.InstaBlog.controller;
 
 import com.InstaBlog.entity.Post;
+import com.InstaBlog.payload.ApiResponse;
 import com.InstaBlog.payload.PostDto;
 import com.InstaBlog.service.PostService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,30 @@ public class PostController {
     public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Integer categoryId){
         List<PostDto> posts = this.postService.getPostsByCategory(categoryId);
         return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostDto>> getAllPosts(){
+        List<PostDto> allPosts = this.postService.getAllPosts();
+        return new ResponseEntity<>(allPosts, HttpStatus.OK);
+    }
+
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable Integer postId){
+        PostDto post = this.postService.getPostById(postId);
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public ApiResponse deletePostById(@PathVariable Integer postId){
+        this.postService.deletePost(postId);
+        return new ApiResponse("Post Deleted Successfully", true);
+    }
+
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId){
+        PostDto updatedPost = this.postService.updatePost(postDto, postId);
+        return new ResponseEntity<>(updatedPost, HttpStatus.OK);
     }
 
 }
