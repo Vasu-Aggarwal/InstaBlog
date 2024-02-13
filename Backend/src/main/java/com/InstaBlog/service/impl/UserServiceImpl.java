@@ -1,9 +1,10 @@
-package com.InstaBlog.service;
+package com.InstaBlog.service.impl;
 
 import com.InstaBlog.entity.User;
 import com.InstaBlog.exception.ResourceNotFoundException;
 import com.InstaBlog.payload.UserDto;
 import com.InstaBlog.repository.UserRepo;
+import com.InstaBlog.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepo userRepo;

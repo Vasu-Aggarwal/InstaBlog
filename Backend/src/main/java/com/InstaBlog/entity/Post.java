@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Data
@@ -25,4 +25,6 @@ public class Post {
     private Category category;
     @ManyToOne
     private User user;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 }

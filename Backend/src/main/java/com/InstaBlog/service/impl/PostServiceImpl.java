@@ -1,4 +1,4 @@
-package com.InstaBlog.service;
+package com.InstaBlog.service.impl;
 
 import com.InstaBlog.entity.Category;
 import com.InstaBlog.entity.Post;
@@ -9,6 +9,7 @@ import com.InstaBlog.payload.PostResponse;
 import com.InstaBlog.repository.CategoryRepo;
 import com.InstaBlog.repository.PostRepo;
 import com.InstaBlog.repository.UserRepo;
+import com.InstaBlog.service.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PostServiceImpl implements PostService{
+public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostRepo postRepo;

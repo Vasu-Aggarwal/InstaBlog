@@ -1,9 +1,10 @@
-package com.InstaBlog.service;
+package com.InstaBlog.service.impl;
 
 import com.InstaBlog.entity.Category;
 import com.InstaBlog.exception.ResourceNotFoundException;
 import com.InstaBlog.payload.CategoryDto;
 import com.InstaBlog.repository.CategoryRepo;
+import com.InstaBlog.service.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepo categoryRepo;

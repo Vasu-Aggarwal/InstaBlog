@@ -1,11 +1,12 @@
 package com.InstaBlog.payload;
 
 import com.InstaBlog.entity.Category;
+import com.InstaBlog.entity.Comment;
 import com.InstaBlog.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -18,5 +19,5 @@ public class PostDto {
     private Date addedDate;
     private CategoryDto category;
     private UserDto user;
-
+    private List<CommentDto> comments = new ArrayList<>();
 }
