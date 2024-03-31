@@ -44,7 +44,7 @@ public class SecurityConfig {
         //configuration
         httpSecurity.csrf(csrf->csrf.disable())
                 .cors(cors->cors.disable())
-                .authorizeHttpRequests(auth->auth.requestMatchers("api/**").hasRole("ADMIN").requestMatchers("/auth/login").permitAll())
+                .authorizeHttpRequests(auth->auth.requestMatchers("api/**").authenticated().requestMatchers("/auth/login").permitAll())
                 .exceptionHandling(ex->ex.authenticationEntryPoint(point))
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
