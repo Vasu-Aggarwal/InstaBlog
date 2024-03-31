@@ -2,8 +2,10 @@ package com.InstaBlog.controller;
 
 import com.InstaBlog.entity.JwtRequest;
 import com.InstaBlog.entity.JwtResponse;
+import com.InstaBlog.payload.UserDto;
 import com.InstaBlog.security.CustomUserDetailService;
 import com.InstaBlog.security.JwtHelper;
+import com.InstaBlog.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class AuthController {
     @Autowired
     private AuthenticationManager manager;
 
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private JwtHelper helper;
@@ -60,6 +64,12 @@ public class AuthController {
             throw new BadCredentialsException(" Invalid Username or Password  !!");
         }
 
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto){
+        UserDto user = this.userService.registerNewUser(userDto);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @ExceptionHandler(BadCredentialsException.class)

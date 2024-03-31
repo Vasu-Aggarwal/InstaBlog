@@ -1,12 +1,15 @@
 package com.InstaBlog.service.impl;
 
+import com.InstaBlog.entity.Role;
 import com.InstaBlog.entity.User;
 import com.InstaBlog.exception.ResourceNotFoundException;
 import com.InstaBlog.payload.UserDto;
+import com.InstaBlog.repository.RoleRepo;
 import com.InstaBlog.repository.UserRepo;
 import com.InstaBlog.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +23,22 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepo roleRepo;
+
+    @Override
+    public UserDto registerNewUser(UserDto userDto) {
+        User user = this.modelMapper.map(userDto, User.class);
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+//        Role role = this.roleRepo.findById(502).get();
+//        user.getRoles().add(role);
+        User newUser = this.userRepo.save(user);
+        return this.modelMapper.map(newUser, UserDto.class);
+    }
 
     @Override
     public UserDto createUser(UserDto userdto) {
